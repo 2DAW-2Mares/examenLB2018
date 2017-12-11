@@ -1,0 +1,161 @@
+{
+  "name": "ListaFamiliar",
+  "plural": "ListasFamiliares",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "nombre": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "miembros": {
+      "type": "hasMany",
+      "model": "Usuario",
+      "foreignKey": "listaFamiliarId"
+    },
+    "propietario": {
+      "type": "belongsTo",
+      "model": "Usuario",
+      "foreignKey": "owner"
+    },
+    "solicitudes": {
+      "type": "hasAndBelongsToMany",
+      "model": "Usuario",
+      "foreignKey": ""
+    },
+    "productos": {
+      "type": "hasMany",
+      "model": "Producto",
+      "foreignKey": "listaFamiliarId"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "create"
+    },
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "solicitar"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "find"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "findById"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "miembroAlgunaLista",
+      "permission": "ALLOW",
+      "property": "invitar"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "miembroLista",
+      "permission": "ALLOW",
+      "property": "__get__solicitudes"
+    }
+  ],
+  "methods": {
+    "prototype.solicitar": {
+      "accepts": [
+        {
+          "arg": "contexto",
+          "type": "object",
+          "required": true,
+          "description": "El objeto del contexto",
+          "http": {
+            "source": "context"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "solicitud",
+          "type": "object",
+          "root": true,
+          "description": "Los datos de la solicitud recién creada."
+        }
+      ],
+      "description": "Añade una solicitud, del usuario autenticado, a la lista familiar seleccionada.",
+      "http": [
+        {
+          "path": "/solicitar",
+          "verb": "post"
+        }
+      ]
+    },
+    "invitar": {
+      "accepts": [
+        {
+          "arg": "context",
+          "type": "object",
+          "required": true,
+          "description": "El objeto de contexto",
+          "http": {
+            "source": "context"
+          }
+        },
+        {
+          "arg": "email",
+          "type": "string",
+          "required": true,
+          "description": "El email del usuario al que se va a invitar",
+          "http": {
+            "source": "query"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "mensaje",
+          "type": "string",
+          "root": true,
+          "description": "Mensaje de correo enviado"
+        }
+      ],
+      "description": "Invitar a un usuario por email",
+      "http": [
+        {
+          "path": "/invitar",
+          "verb": "get"
+        }
+      ]
+    }
+  }
+}

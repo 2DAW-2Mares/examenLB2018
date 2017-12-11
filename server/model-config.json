@@ -1,0 +1,86 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "User": {
+    "dataSource": "mysqlDs"
+  },
+  "AccessToken": {
+    "dataSource": "mysqlDs",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "mysqlDs",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "mysqlDs",
+    "public": false,
+    "options": {
+      "strictObjectIDCoercion": true
+    }
+  },
+  "Role": {
+    "dataSource": "mysqlDs",
+    "public": false
+  },
+  "Usuario": {
+    "dataSource": "mysqlDs",
+    "public": true,
+    "options": {
+      "remoting": {
+        "sharedMethods": {
+          "*": false,
+          "find": true,
+          "create": true,
+          "login": true,
+          "logout": true,
+          "resetPassword": true,
+          "setPassword": true,
+          "prototype.patchAttributes": true,
+          "prototype.aceptarSolicitud": true,
+          "prototype.rechazarSolicitud": true,
+          "prototype.nuevoPropietario": true
+        }
+      }
+    }
+  },
+  "ListaFamiliar": {
+    "dataSource": "mysqlDs",
+    "public": true,
+    "options": {
+      "remoting": {
+        "sharedMethods": {
+          "*": false,
+          "find": true,
+          "findById": true,
+          "deleteById": true,
+          "create": true,
+          "invitar": true,
+          "prototype.__get__solicitudes": true,
+          "prototype.solicitar": true,
+          "prototype.solicitar": true,
+          "prototype.propietarioAlternativo": true
+        }
+      }
+    }
+  },
+  "Producto": {
+    "dataSource": "mysqlDs",
+    "public": true
+  },
+  "Email": {
+    "dataSource": "EmailDS"
+  }
+}
